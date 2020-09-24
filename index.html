@@ -185,11 +185,11 @@ var a=function(){function e(t){var n=t.data,r=t.config,i=t.api;!function(e,t){if
         }
     });
 
-    getResult(){
+    function getResult(){
 	    editor.save().then((outputData) => {
 		  var blocks = outputData.blocks;
 		  console.log(blocks);
-		}
+		});
     }
 
 </script>
