@@ -184,19 +184,7 @@ var a=function(){function e(t){var n=t.data,r=t.config,i=t.api;!function(e,t){if
         }
     });
 
-    jQuery('#save-screen').click(function(e){
-      var t = jQuery(this);
-      e.preventDefault();
-      editor.save().then((outputData) => {
-        var blocks = outputData.blocks;
-        console.log(blocks);
-        var str_blocks = JSON.stringify(blocks);
-        var id = t.attr('data-id');
-        
-      }).catch((error) => {
-        console.log('Saving failed: ', error)
-      });
-    });
+    
 
 </script>
   </body>
