@@ -10,7 +10,7 @@ This is a test for multiple columns without nested elements. Using Bootstrap lik
 ### Installation
 Use editor.js file
 ```HTML
-<script type='text/javascript' src='heditor.js?ver=multicolumn'></script>
+<script type='text/javascript' src='editor.js?ver=multicolumn'></script>
 ```
 Please add this css styles
 ```CSS
