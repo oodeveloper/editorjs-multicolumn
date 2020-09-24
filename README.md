@@ -7,6 +7,11 @@ This is a test for multiple columns without nested elements. Using Bootstrap lik
 * Please note that this is just a test and this is not for production
 [Related Topic](https://github.com/codex-team/editor.js/issues/836)
 
+###Installation
+Use editor.js file
+```HTML
+<script type='text/javascript' src='heditor.js?ver=multicolumn'></script>
+```
 Please add this css styles
 ```CSS
   /* Editor CSS */
