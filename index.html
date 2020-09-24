@@ -137,7 +137,7 @@ var a=function(){function e(t){var n=t.data,r=t.config,i=t.api;!function(e,t){if
       		  class: ImageTool,
       			  config: {
       				endpoints: {
-      				  byFile: ajax.ajaxurl+'?action=explorex_global_upload&_wpnonce='+ajax._nonce, // Your backend file uploader endpoint
+      				  byFile: 'http://localhost:8008', //ajax.ajaxurl+'?action=explorex_global_upload&_wpnonce='+ajax._nonce, // Your backend file uploader endpoint
       				  byUrl: 'http://localhost:8008/fetchUrl', // Your endpoint that provides uploading by Url
       				}
       			  }
