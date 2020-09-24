@@ -7,11 +7,11 @@
 
     </head>
   <body>
-<div id="editorjs" class="pt-2"></div>
+<div id="editorjs" class="pt-2 mt-5"></div>
 <nav class="navbar navbar-light flex-column align-items-start position-fixed" style="left:.5rem;bottom:1rem;">
   <h6 class="navbar-brand m-0"><?php _e('Screen Design','explorex');?></h6>
   <div>
-    <button type="button" class="btn btn-success" id="save-screen" data-id="<?php echo $scrnid;?>"><?php _e('Save Screen','explorelab');?></button>
+    <button type="button" class="btn btn-success" id="save-screen" onclick="getResult()">Save Screen</button>
   </div>
 </nav>
 
@@ -184,7 +184,12 @@ var a=function(){function e(t){var n=t.data,r=t.config,i=t.api;!function(e,t){if
         }
     });
 
-    
+    getResult(){
+	    editor.save().then((outputData) => {
+		  var blocks = outputData.blocks;
+		  console.log(blocks);
+		}
+    }
 
 </script>
   </body>
