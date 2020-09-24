@@ -1,1 +1,113 @@
 
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <link media="all" rel="stylesheet" href="style.css" />
+        <script type="application/javascript" src="script.js"></script>
+
+    </head>
+  <body>
+<div id="editorjs" class="pt-2"></div>
+<nav class="navbar navbar-light flex-column align-items-start position-fixed" style="left:.5rem;bottom:1rem;">
+  <h6 class="navbar-brand m-0"><?php _e('Screen Design','explorex');?></h6>
+  <div>
+    <button type="button" class="btn btn-success" id="save-screen" data-id="<?php echo $scrnid;?>"><?php _e('Save Screen','explorelab');?></button>
+  </div>
+</nav>
+
+
+<script>
+	const ImageTool = window.ImageTool;
+
+    const editor = new EditorJS({
+      autofocus: true,
+    	  tools:{
+          header: {
+            class: Header,
+            config: {
+              placeholder: 'Enter a header',
+              levels: [1,2, 3, 4,5,6],
+              defaultLevel: 3
+            }
+          },
+          inlineCode: {
+             class: InlineCode,
+             shortcut: 'CMD+SHIFT+M',
+           },
+           Marker: {
+            class: Marker,
+            shortcut: 'CMD+SHIFT+M',
+          },
+          underline: Underline,
+          list: {
+              class: List,
+              inlineToolbar: true,
+            },
+          image: {
+      		  class: ImageTool,
+      			  config: {
+      				endpoints: {
+      				  byFile: ajax.ajaxurl+'?action=explorex_global_upload&_wpnonce='+ajax._nonce, // Your backend file uploader endpoint
+      				  byUrl: 'http://localhost:8008/fetchUrl', // Your endpoint that provides uploading by Url
+      				}
+      			  }
+      			},
+      		table: {class: Table},
+          embed: {
+            class: Embed,
+            inlineToolbar: true,
+            config: {
+              services: {
+                youtube: true,
+                slideshare: true
+              }
+            }
+          },
+          checklist: {
+            class: Checklist,
+            inlineToolbar: true,
+          },
+          quote: {
+            class: Quote,
+            inlineToolbar: true,
+            shortcut: 'CMD+SHIFT+O',
+            config: {
+              quotePlaceholder: 'Enter a quote',
+              captionPlaceholder: 'Quote\'s author',
+            },
+          },
+          // linkTool: {
+          //     class: LinkTool,
+          //     config: {
+          //       endpoint: ajax.ajaxurl, // Your backend endpoint for url data fetching
+          //     }
+          //   },
+          // demoP: demoP,
+          // text: SimpleTextField,
+          // textarea: SimpleTextAreaField,
+          // button: SimpleButtonField,
+    		},
+        data:{
+          time : 1552744582955,
+          // blocks : JSON.parse('<?php echo empty($screen->content) ? '[]' : $screen->content;?>'),
+          version: "1.0.0"
+        }
+    });
+
+    jQuery('#save-screen').click(function(e){
+      var t = jQuery(this);
+      e.preventDefault();
+      editor.save().then((outputData) => {
+        var blocks = outputData.blocks;
+        console.log(blocks);
+        var str_blocks = JSON.stringify(blocks);
+        var id = t.attr('data-id');
+        
+      }).catch((error) => {
+        console.log('Saving failed: ', error)
+      });
+    });
+
+</script>
+  </body>
+</html>
