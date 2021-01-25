@@ -2,6 +2,10 @@
 
 This is a test for multiple columns without nested elements. Using Bootstrap like grid system and display float (rather than flex) for each block.
 
+UPDATED: Please refer to this https://github.com/codex-team/editor.js/issues/836 there is a better solution now
+CHECKOUT THIS https://github.com/hata6502/editorjs-layout#readme [Multi Column Layout]
+
+
 [Test With Demo](https://oodeveloper.github.io/editorjs-multicolumn/)
 
 * Please note that this is just a test and this is not for production
