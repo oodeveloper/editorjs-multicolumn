@@ -44,24 +44,6 @@ export default class LayoutTune implements BlockTune {
   	this.data = {colWidth:12,pl:0,pr:0,pt:0,pb:0};
     this.wrapper = undefined;
     this.sidebar = undefined;
-  	const currentBlockIndex = this.api.blocks.getCurrentBlockIndex();
-  	if(currentBlockIndex > -1){
-  		const currentBlock = this.api.blocks.getBlockByIndex(currentBlockIndex);
-  		if (currentBlock){
-        const currentBlockElement = currentBlock.holder;
-  			let z = this.api.blocks.getBlock(currentBlockElement);
-  				let data = z.tool['_data'];
-  				if(data){
-  					let colWidth = data.hasOwnProperty('colWidth') ? data.colWidth : 12;
-  					let pl = data.hasOwnProperty('pl') ? data.pl : 0;
-  					let pr = data.hasOwnProperty('pr') ? data.pr : 0;
-  					let pt = data.hasOwnProperty('pt') ? data.pt : 0;
-  					let pb = data.hasOwnProperty('pb') ? data.pb : 0;
-  					currentBlockElement.classList.add('es-col-'+colWidth,'pl-'+pl,'pr-'+pr,'pt-'+pt,'pb-'+pb);
-  				}
-
-  		}
-  	}
   }
 
   /**
@@ -119,35 +101,6 @@ export default class LayoutTune implements BlockTune {
    * @param {HTMLElement} button - clicked button
    */
   public decreaseWidth(event: MouseEvent, button: HTMLElement): void {
-  const currentBlockIndex = this.api.blocks.getCurrentBlockIndex();
-
-  if(currentBlockIndex < 0){
-   return;
-  }
-
-  const currentBlock = this.api.blocks.getBlockByIndex(currentBlockIndex);
-  if (!currentBlock){
-   return;
-  }
-
-  const currentBlockElement = currentBlock.holder;
-  let block = this.api.blocks.getBlock(currentBlockElement);
-	  let data = block.tool['_data'];
-    let colWidth = 12;
-
-	  if(data){
-		   colWidth = data.hasOwnProperty('colWidth') ? data.colWidth : 12;
-		  if(colWidth > 1){
-  			currentBlockElement.classList.remove('es-col-'+colWidth);
-  			colWidth = colWidth - 1;
-		  }
-      currentBlockElement.classList.add('es-col-'+colWidth);
-	  }
-    this.api.blocks.setData(currentBlockIndex,{colWidth:colWidth});
-
-  }
-
-  public increaseWidth(event: MouseEvent, button: HTMLElement): void {
     const currentBlockIndex = this.api.blocks.getCurrentBlockIndex();
 
     if(currentBlockIndex < 0){
@@ -160,20 +113,57 @@ export default class LayoutTune implements BlockTune {
     }
 
     const currentBlockElement = currentBlock.holder;
-     let block = this.api.blocks.getBlock(currentBlockElement);
-	  let data = block.tool['_data'];
-    let colWidth = 12;
 
-	  if(data){
-		   colWidth = data.hasOwnProperty('colWidth') ? data.colWidth : 12;
-		  if(colWidth < 12){
-  			currentBlockElement.classList.remove('es-col-'+colWidth);
-  			colWidth = colWidth + 1;
-		  }
-      currentBlockElement.classList.add('es-col-'+colWidth);
+    // let block = this.api.blocks.getBlock(currentBlockElement);
+    let className = 'col-12';
+    const colClass = new RegExp(/\bcol-.+?\b/, 'g');
+    if (currentBlockElement.className.match(colClass)) {
+      currentBlockElement.classList.forEach( cn => {
+        if(cn.match(colClass)){
+          className = cn;
+        }
+      });
+        let parts = className.split('-');
+        let width = parseInt(parts[1]);
+        if(width >= 2){
+          currentBlockElement.classList.remove('col-'+width);
+          width = width - 1;
+          currentBlockElement.classList.add('col-'+width);
+        }
+    }
+  }
+
+  public increaseWidth(event: MouseEvent, button: HTMLElement): void {
+    const currentBlockIndex = this.api.blocks.getCurrentBlockIndex();
+
+	  if(currentBlockIndex < 0){
+		  return;
 	  }
-    this.api.blocks.setData(currentBlockIndex,{colWidth:colWidth});
 
+	  const currentBlock = this.api.blocks.getBlockByIndex(currentBlockIndex);
+	  if (!currentBlock){
+		  return;
+		}
+
+	  const currentBlockElement = currentBlock.holder;
+
+	  // let block = this.api.blocks.getBlock(currentBlockElement);
+    let className = 'col-12';
+    const colClass = new RegExp(/\bcol-.+?\b/, 'g');
+    if (currentBlockElement.className.match(colClass)) {
+      currentBlockElement.classList.forEach( cn => {
+        if(cn.match(colClass)){
+          className = cn;
+        }
+      });
+        let parts = className.split('-');
+        let width = parseInt(parts[1]);
+        if(width <= 11){
+    			currentBlockElement.classList.remove('col-'+width);
+    			width = width + 1;
+          currentBlockElement.classList.add('col-'+width);
+  		  }
+    }
   }
 
   public showPadding(event: MouseEvent, button: HTMLElement): void {
@@ -302,174 +292,206 @@ export default class LayoutTune implements BlockTune {
   public increasePaddingLeft(event: MouseEvent, button: HTMLElement): void {
     const currentBlockIndex = this.api.blocks.getCurrentBlockIndex();
 
-    if(currentBlockIndex < 0){
-     return;
-    }
+	  if(currentBlockIndex < 0){
+		  return;
+	  }
 
-    const currentBlock = this.api.blocks.getBlockByIndex(currentBlockIndex);
-    if (!currentBlock){
-     return;
-    }
+	  const currentBlock = this.api.blocks.getBlockByIndex(currentBlockIndex);
+	  if (!currentBlock){
+		  return;
+		}
 
-    const currentBlockElement = currentBlock.holder;
-    let block = this.api.blocks.getBlock(currentBlockElement);
-    let data = block.tool['_data'];
-    let pl = 0;
+	  const currentBlockElement = currentBlock.holder;
 
-    if(data){
-      pl = data.hasOwnProperty('pl') ? data.pl : 0;
-     if(pl < 5){
-       currentBlockElement.classList.remove('pl-'+pl);
-       pl = pl + 1;
-     }
-      currentBlockElement.classList.add('pl-'+pl);
+	  // let block = this.api.blocks.getBlock(currentBlockElement);
+    let className = 'pl-0';
+    const paddingClass = new RegExp(/\pl-.+?\b/, 'g');
+    if (currentBlockElement.className.match(paddingClass)) {
+      currentBlockElement.classList.forEach( cn => {
+        if(cn.match(paddingClass)){
+          className = cn;
+        }
+      });
+        let parts = className.split('-');
+        let padding = parseInt(parts[1]);
+        if(padding <= 4){
+    			currentBlockElement.classList.remove('pl-'+padding);
+    			padding = padding + 1;
+          currentBlockElement.classList.add('pl-'+padding);
+  		  }
     }
-    this.api.blocks.setData(currentBlockIndex,{pl:pl});
 
   }
 
   public decreasePaddingLeft(event: MouseEvent, button: HTMLElement): void {
     const currentBlockIndex = this.api.blocks.getCurrentBlockIndex();
 
-    if(currentBlockIndex < 0){
-     return;
-    }
+	  if(currentBlockIndex < 0){
+		  return;
+	  }
 
-    const currentBlock = this.api.blocks.getBlockByIndex(currentBlockIndex);
-    if (!currentBlock){
-     return;
-    }
+	  const currentBlock = this.api.blocks.getBlockByIndex(currentBlockIndex);
+	  if (!currentBlock){
+		  return;
+		}
 
-    const currentBlockElement = currentBlock.holder;
-    let block = this.api.blocks.getBlock(currentBlockElement);
-    let data = block.tool['_data'];
-    let pl = 0;
+	  const currentBlockElement = currentBlock.holder;
 
-    if(data){
-      pl = data.hasOwnProperty('pl') ? data.pl : 0;
-     if(pl > 0){
-       currentBlockElement.classList.remove('pl-'+pl);
-       pl = pl - 1;
-     }
-      currentBlockElement.classList.add('pl-'+pl);
+	  // let block = this.api.blocks.getBlock(currentBlockElement);
+    let className = 'pl-0';
+    const paddingClass = new RegExp(/\pl-.+?\b/, 'g');
+    if (currentBlockElement.className.match(paddingClass)) {
+      currentBlockElement.classList.forEach( cn => {
+        if(cn.match(paddingClass)){
+          className = cn;
+        }
+      });
+        let parts = className.split('-');
+        let padding = parseInt(parts[1]);
+        if(padding >= 1){
+    			currentBlockElement.classList.remove('pl-'+padding);
+    			padding = padding - 1;
+          currentBlockElement.classList.add('pl-'+padding);
+  		  }
     }
-    this.api.blocks.setData(currentBlockIndex,{pl:pl});
 
   }
 
   public increasePaddingRight(event: MouseEvent, button: HTMLElement): void {
     const currentBlockIndex = this.api.blocks.getCurrentBlockIndex();
 
-    if(currentBlockIndex < 0){
-     return;
+	  if(currentBlockIndex < 0){
+		  return;
+	  }
+
+	  const currentBlock = this.api.blocks.getBlockByIndex(currentBlockIndex);
+	  if (!currentBlock){
+		  return;
+		}
+
+	  const currentBlockElement = currentBlock.holder;
+
+	  // let block = this.api.blocks.getBlock(currentBlockElement);
+    let className = 'pr-0';
+    const paddingClass = new RegExp(/\pr-.+?\b/, 'g');
+    if (currentBlockElement.className.match(paddingClass)) {
+      currentBlockElement.classList.forEach( cn => {
+        if(cn.match(paddingClass)){
+          className = cn;
+        }
+      });
+        let parts = className.split('-');
+        let padding = parseInt(parts[1]);
+        if(padding <= 4){
+    			currentBlockElement.classList.remove('pr-'+padding);
+    			padding = padding + 1;
+          currentBlockElement.classList.add('pr-'+padding);
+  		  }
     }
 
-    const currentBlock = this.api.blocks.getBlockByIndex(currentBlockIndex);
-    if (!currentBlock){
-     return;
-    }
-
-    const currentBlockElement = currentBlock.holder;
-    let block = this.api.blocks.getBlock(currentBlockElement);
-    let data = block.tool['_data'];
-    let pr = 0;
-
-    if(data){
-      pr = data.hasOwnProperty('pr') ? data.pr : 0;
-     if(pr < 5){
-       currentBlockElement.classList.remove('pr-'+pr);
-       pr = pr + 1;
-     }
-      currentBlockElement.classList.add('pr-'+pr);
-    }
-    this.api.blocks.setData(currentBlockIndex,{pr:pr});
 
   }
 
   public decreasePaddingRight(event: MouseEvent, button: HTMLElement): void {
     const currentBlockIndex = this.api.blocks.getCurrentBlockIndex();
 
-    if(currentBlockIndex < 0){
-     return;
-    }
+	  if(currentBlockIndex < 0){
+		  return;
+	  }
 
-    const currentBlock = this.api.blocks.getBlockByIndex(currentBlockIndex);
-    if (!currentBlock){
-     return;
-    }
+	  const currentBlock = this.api.blocks.getBlockByIndex(currentBlockIndex);
+	  if (!currentBlock){
+		  return;
+		}
 
-    const currentBlockElement = currentBlock.holder;
-    let block = this.api.blocks.getBlock(currentBlockElement);
-    let data = block.tool['_data'];
-    let pr = 0;
+	  const currentBlockElement = currentBlock.holder;
 
-    if(data){
-      pr = data.hasOwnProperty('pr') ? data.pr : 0;
-     if(pr > 0){
-       currentBlockElement.classList.remove('pr-'+pr);
-       pr = pr - 1;
-     }
-      currentBlockElement.classList.add('pr-'+pr);
+	  // let block = this.api.blocks.getBlock(currentBlockElement);
+    let className = 'pr-0';
+    const paddingClass = new RegExp(/\pr-.+?\b/, 'g');
+    if (currentBlockElement.className.match(paddingClass)) {
+      currentBlockElement.classList.forEach( cn => {
+        if(cn.match(paddingClass)){
+          className = cn;
+        }
+      });
+        let parts = className.split('-');
+        let padding = parseInt(parts[1]);
+        if(padding >= 1){
+    			currentBlockElement.classList.remove('pr-'+padding);
+    			padding = padding - 1;
+          currentBlockElement.classList.add('pr-'+padding);
+  		  }
     }
-    this.api.blocks.setData(currentBlockIndex,{pr:pr});
 
   }
 
   public increasePaddingTop(event: MouseEvent, button: HTMLElement): void {
     const currentBlockIndex = this.api.blocks.getCurrentBlockIndex();
 
-    if(currentBlockIndex < 0){
-     return;
+	  if(currentBlockIndex < 0){
+		  return;
+	  }
+
+	  const currentBlock = this.api.blocks.getBlockByIndex(currentBlockIndex);
+	  if (!currentBlock){
+		  return;
+		}
+
+	  const currentBlockElement = currentBlock.holder;
+
+	  // let block = this.api.blocks.getBlock(currentBlockElement);
+    let className = 'pt-0';
+    const paddingClass = new RegExp(/\pt-.+?\b/, 'g');
+    if (currentBlockElement.className.match(paddingClass)) {
+      currentBlockElement.classList.forEach( cn => {
+        if(cn.match(paddingClass)){
+          className = cn;
+        }
+      });
+        let parts = className.split('-');
+        let padding = parseInt(parts[1]);
+        if(padding <= 4){
+    			currentBlockElement.classList.remove('pt-'+padding);
+    			padding = padding + 1;
+          currentBlockElement.classList.add('pt-'+padding);
+  		  }
     }
 
-    const currentBlock = this.api.blocks.getBlockByIndex(currentBlockIndex);
-    if (!currentBlock){
-     return;
-    }
-
-    const currentBlockElement = currentBlock.holder;
-    let block = this.api.blocks.getBlock(currentBlockElement);
-    let data = block.tool['_data'];
-    let pt = 0;
-
-    if(data){
-      pt = data.hasOwnProperty('pt') ? data.pt : 0;
-     if(pt < 5){
-       currentBlockElement.classList.remove('pt-'+pt);
-       pt = pt + 1;
-     }
-      currentBlockElement.classList.add('pt-'+pt);
-    }
-    this.api.blocks.setData(currentBlockIndex,{pt:pt});
 
   }
 
   public decreasePaddingTop(event: MouseEvent, button: HTMLElement): void {
     const currentBlockIndex = this.api.blocks.getCurrentBlockIndex();
 
-    if(currentBlockIndex < 0){
-     return;
-    }
+	  if(currentBlockIndex < 0){
+		  return;
+	  }
 
-    const currentBlock = this.api.blocks.getBlockByIndex(currentBlockIndex);
-    if (!currentBlock){
-     return;
-    }
+	  const currentBlock = this.api.blocks.getBlockByIndex(currentBlockIndex);
+	  if (!currentBlock){
+		  return;
+		}
 
-    const currentBlockElement = currentBlock.holder;
-    let block = this.api.blocks.getBlock(currentBlockElement);
-    let data = block.tool['_data'];
-    let pt = 0;
+	  const currentBlockElement = currentBlock.holder;
 
-    if(data){
-      pt = data.hasOwnProperty('pt') ? data.pt : 0;
-     if(pt > 0){
-       currentBlockElement.classList.remove('pt-'+pt);
-       pt = pt - 1;
-     }
-      currentBlockElement.classList.add('pt-'+pt);
+	  // let block = this.api.blocks.getBlock(currentBlockElement);
+    let className = 'pt-0';
+    const paddingClass = new RegExp(/\pt-.+?\b/, 'g');
+    if (currentBlockElement.className.match(paddingClass)) {
+      currentBlockElement.classList.forEach( cn => {
+        if(cn.match(paddingClass)){
+          className = cn;
+        }
+      });
+        let parts = className.split('-');
+        let padding = parseInt(parts[1]);
+        if(padding >= 1){
+    			currentBlockElement.classList.remove('pt-'+padding);
+    			padding = padding - 1;
+          currentBlockElement.classList.add('pt-'+padding);
+  		  }
     }
-    this.api.blocks.setData(currentBlockIndex,{pt:pt});
 
   }
 
@@ -477,57 +499,67 @@ export default class LayoutTune implements BlockTune {
     const currentBlockIndex = this.api.blocks.getCurrentBlockIndex();
 
     if(currentBlockIndex < 0){
-     return;
+      return;
     }
 
     const currentBlock = this.api.blocks.getBlockByIndex(currentBlockIndex);
     if (!currentBlock){
-     return;
+      return;
     }
 
     const currentBlockElement = currentBlock.holder;
-    let block = this.api.blocks.getBlock(currentBlockElement);
-    let data = block.tool['_data'];
-    let pb = 0;
 
-    if(data){
-      pb = data.hasOwnProperty('pb') ? data.pb : 0;
-     if(pb < 5){
-       currentBlockElement.classList.remove('pb-'+pb);
-       pb = pb + 1;
-     }
-      currentBlockElement.classList.add('pb-'+pb);
+    // let block = this.api.blocks.getBlock(currentBlockElement);
+    let className = 'pb-0';
+    const paddingClass = new RegExp(/\pb-.+?\b/, 'g');
+    if (currentBlockElement.className.match(paddingClass)) {
+      currentBlockElement.classList.forEach( cn => {
+        if(cn.match(paddingClass)){
+          className = cn;
+        }
+      });
+        let parts = className.split('-');
+        let padding = parseInt(parts[1]);
+        if(padding <= 4){
+          currentBlockElement.classList.remove('pb-'+padding);
+          padding = padding + 1;
+          currentBlockElement.classList.add('pb-'+padding);
+        }
     }
-    this.api.blocks.setData(currentBlockIndex,{pb:pb});
 
   }
 
   public decreasePaddingBottom(event: MouseEvent, button: HTMLElement): void {
     const currentBlockIndex = this.api.blocks.getCurrentBlockIndex();
 
-    if(currentBlockIndex < 0){
-     return;
-    }
+	  if(currentBlockIndex < 0){
+		  return;
+	  }
 
-    const currentBlock = this.api.blocks.getBlockByIndex(currentBlockIndex);
-    if (!currentBlock){
-     return;
-    }
+	  const currentBlock = this.api.blocks.getBlockByIndex(currentBlockIndex);
+	  if (!currentBlock){
+		  return;
+		}
 
-    const currentBlockElement = currentBlock.holder;
-    let block = this.api.blocks.getBlock(currentBlockElement);
-    let data = block.tool['_data'];
-    let pb = 0;
+	  const currentBlockElement = currentBlock.holder;
 
-    if(data){
-      pb = data.hasOwnProperty('pb') ? data.pb : 0;
-     if(pb > 0){
-       currentBlockElement.classList.remove('pb-'+pb);
-       pb = pb - 1;
-     }
-      currentBlockElement.classList.add('pb-'+pb);
+	  // let block = this.api.blocks.getBlock(currentBlockElement);
+    let className = 'pb-0';
+    const paddingClass = new RegExp(/\pb-.+?\b/, 'g');
+    if (currentBlockElement.className.match(paddingClass)) {
+      currentBlockElement.classList.forEach( cn => {
+        if(cn.match(paddingClass)){
+          className = cn;
+        }
+      });
+        let parts = className.split('-');
+        let padding = parseInt(parts[1]);
+        if(padding >= 1){
+    			currentBlockElement.classList.remove('pb-'+padding);
+    			padding = padding - 1;
+          currentBlockElement.classList.add('pb-'+padding);
+  		  }
     }
-    this.api.blocks.setData(currentBlockIndex,{pb:pb});
   }
 
 }
